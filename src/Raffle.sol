@@ -13,11 +13,17 @@ contract Raffle is VRFConsumerBaseV2 {
     error Raffle__NotEnoughEthSent();
     error Raffle_TransferFailed();
     error Raffle_RaffleNotOpen();
+    error Raffle_UpkeepNotNeeded(
+        uint256 currentBalance,
+        uint256 numPlayers,
+        uint256 raffleState
+    );
 
     /**Type declarations */
-    enum RaffleState {OPEN, CALCULATING}
-        
-    
+    enum RaffleState {
+        OPEN,
+        CALCULATING
+    }
 
     /**State Variable */
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
@@ -61,16 +67,32 @@ contract Raffle is VRFConsumerBaseV2 {
         if (msg.value < i_entranceFee) {
             revert("Not enough Ether sent.");
         }
-        if(s_raffleState != RaffleState.OPEN){
+        if (s_raffleState != RaffleState.OPEN) {
             revert("Raffle is not open");
         }
         s_players.push(payable(msg.sender));
         emit EnteredRaffle(msg.sender);
     }
 
-    function pickWinner() external {
-        if (block.timestamp - s_lastTimeStamp < i_interval) {
-            revert();
+    function checkUpKeep(
+        bytes memory /*checkData*/
+    ) public view returns (bool upkeepNeeded, bytes memory /* perfromData*/) {
+        bool timeHasPassed = (block.timestamp - s_lastTimeStamp) >= i_interval;
+        bool isOpen = RaffleState.OPEN == s_raffleState;
+        bool hasBalance = address(this).balance > 0;
+        bool hadPlayers = s_players.length > 0;
+        upkeepNeeded = (timeHasPassed && isOpen && hasBalance && hadPlayers);
+        return (upkeepNeeded, "0x0");
+    }
+
+    function performUpkeep(bytes calldata /** performData */) external {
+        (bool upkeepNeeded, ) = checkUpKeep("");
+        if (!upkeepNeeded) {
+            revert Raffle_UpkeepNotNeeded(
+                address(this.balance),
+                s_players.length,
+                uint256(s_raffleState)
+            );
         }
         s_raffleState = RaffleState.CALCULATING;
         uint256 requestId = i_vrfCoordinator.requestRandomWords(
@@ -96,11 +118,9 @@ contract Raffle is VRFConsumerBaseV2 {
         emit PickedWinner(winner);
 
         (bool success, ) = winner.call{value: address(this).balance}("");
-        if(!success){
-            revert Raffle_TransferFailed ();
+        if (!success) {
+            revert Raffle_TransferFailed();
         }
-        
-
     }
 
     function getEntranceFee() public view returns (uint256) {
