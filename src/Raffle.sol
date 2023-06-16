@@ -17,7 +17,7 @@ contract Raffle is VRFConsumerBaseV2 {
     /**Type declarations */
     enum RaffleState {OPEN, CALCULATING}
         
-    }
+    
 
     /**State Variable */
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
@@ -76,7 +76,7 @@ contract Raffle is VRFConsumerBaseV2 {
         uint256 requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
-            REQUEST_CONFIRMATION,
+            REQUEST_CONFIRMATIONS,
             i_callbackGasLimit,
             NUM_WORDS
         );
@@ -93,12 +93,13 @@ contract Raffle is VRFConsumerBaseV2 {
 
         s_players = new address payable[](0);
         s_lastTimeStamp = block.timestamp;
+        emit PickedWinner(winner);
 
         (bool success, ) = winner.call{value: address(this).balance}("");
         if(!success){
             revert Raffle_TransferFailed ();
         }
-        emit PickedWinner(winner);
+        
 
     }
 
