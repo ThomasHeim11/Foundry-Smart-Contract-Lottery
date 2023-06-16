@@ -3,13 +3,13 @@
 pragma solidity ^0.8.18;
 
 import {VRFCoordinatorV2Interface} from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-
+import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
 /**@title A sample Raffle Contract
  * @notice This contract is for creating a sample raffle contract
  * @dev This implements the Chainlink VRF Version 2
  */
-contract Raffle {
+contract Raffle is VRFConsumerBaseV2 {
     error Raffle__NotEnoughEthSent();
 
     /**State Variable */
@@ -23,17 +23,23 @@ contract Raffle {
     uint64 private immutable i_subscriptionId;
     uint32 private immutable i_callbackGasLimit;
 
-
     address payable[] private s_players;
     uint256 private s_lastTimeStamp;
 
     /** Event */
     event EnteredRaffle(address indexed player);
 
-    constructor(uint256 entranceFee, uint256 interval, address vrfCoordinator,bytes32 gasLane, uint64 subscriptionId, uint32 callbackGasLimit) {
+    constructor(
+        uint256 entranceFee,
+        uint256 interval,
+        address vrfCoordinator,
+        bytes32 gasLane,
+        uint64 subscriptionId,
+        uint32 callbackGasLimit
+    ) VRFConsumerBaseV2(vrfCoordinator) {
         i_entranceFee = entranceFee;
         i_interval = interval;
-        i_vrfCoordinator = VRFCoordinatorV2Interface (vrfCoordinator);
+        i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinator);
         i_gasLane = gasLane;
         i_subscriptionId = subscriptionId;
         i_callbackGasLimit = callbackGasLimit;
@@ -57,10 +63,14 @@ contract Raffle {
             i_subscriptionId,
             REQUEST_CONFIRMATION,
             i_callbackGasLimit,
-            NUM_WORDS 
-        
+            NUM_WORDS
         );
     }
+
+    function fufillRandomWords(
+        uint256 requestId,
+        uint256[] memory randomWords
+    ) internal override {}
 
     function getEntranceFee() public view returns (uint256) {
         return i_entranceFee;
