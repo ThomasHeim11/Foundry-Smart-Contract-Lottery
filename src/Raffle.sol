@@ -14,7 +14,7 @@ contract Raffle {
     address payable[] private s_players;
     uint256 private s_lastTimeStamp;
 
-    /** Evnet */
+    /** Event */
     event EnteredRaffle(address indexed player);
 
     constructor(uint256 entranceFee, uint256 interval) {
@@ -25,19 +25,16 @@ contract Raffle {
 
     function enterRaffle() external payable {
         if (msg.value < i_entranceFee) {
-            revert Raffle__NotEnoughEthSent();
+            revert("Not enough Ether sent.");
         }
         s_players.push(payable(msg.sender));
         emit EnteredRaffle(msg.sender);
     }
 
-    function pickWinner() public {
-        if (block.timestamp - s_lastTimeStamp) < i_interval) {
+    function pickWinner() external {
+        if (block.timestamp - s_lastTimeStamp < i_interval) {
             revert();
-
         }
-
-
     }
 
     function getEntranceFee() public view returns (uint256) {
