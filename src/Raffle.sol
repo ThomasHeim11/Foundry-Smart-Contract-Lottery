@@ -7,7 +7,15 @@ pragma solidity ^0.8.18;
  * @dev This implements the Chainlink VRF Version 2
  */
 contract Raffle {
-    constructor() {
+    uint256 private entranceFee;
+    function enterRaffle() public payable {
         
     }
+
+    function pickWinner() public {
+        
+    }
+     
+        
+    
 }
