@@ -65,10 +65,10 @@ contract Raffle is VRFConsumerBaseV2 {
 
     function enterRaffle() external payable {
         if (msg.value < i_entranceFee) {
-            revert("Not enough Ether sent.");
+            revert Raffle__NotEnoughEthSent();
         }
         if (s_raffleState != RaffleState.OPEN) {
-            revert("Raffle is not open");
+            revert Raffle__NotEnoughEthSent();
         }
         s_players.push(payable(msg.sender));
         emit EnteredRaffle(msg.sender);
@@ -129,5 +129,9 @@ contract Raffle is VRFConsumerBaseV2 {
 
     function getRaffleState() external view returns (RaffleState) {
         return s_raffleState;
+    }
+
+    function getPlayer(uint256 indexOfPlayer) external view returns (address) {
+        return s_players[indexOfPlayer];
     }
 }
