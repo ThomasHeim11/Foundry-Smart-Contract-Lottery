@@ -5,6 +5,7 @@ pragma solidity ^0.8.18;
 import {VRFCoordinatorV2Interface} from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
+
 /**@title A sample Raffle Contract
  * @notice This contract is for creating a sample raffle contract
  * @dev This implements the Chainlink VRF Version 2
