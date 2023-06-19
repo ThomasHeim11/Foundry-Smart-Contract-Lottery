@@ -3,6 +3,8 @@
 import {Script} from "forge-std/Script.sol";
 import {Raffle} from "../src/Raffle.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
+import { CreateSubscription} from "./Interactions.s.sol";
+
 
 pragma solidity ^0.8.18;
 
@@ -20,6 +22,9 @@ contract DeployRaffle is Script {
 
         if(subscriptionId == 0) {
             subscriptionId = 1;
+
+            CreateSubscription createSubscription = new CreateSubscription();
+            subscriptionId = createSubscription.createSubscription(vrfCoordinator);
         }
 
         Raffle raffle = new Raffle(
