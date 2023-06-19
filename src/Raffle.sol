@@ -5,7 +5,6 @@ pragma solidity ^0.8.18;
 import {VRFCoordinatorV2Interface} from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-
 /**@title A sample Raffle Contract
  * @notice This contract is for creating a sample raffle contract
  * @dev This implements the Chainlink VRF Version 2
@@ -90,7 +89,7 @@ contract Raffle is VRFConsumerBaseV2 {
         (bool upkeepNeeded, ) = checkUpKeep("");
         if (!upkeepNeeded) {
             revert Raffle_UpkeepNotNeeded(
-                address(this.balance),
+                address(this).balance,
                 s_players.length,
                 uint256(s_raffleState)
             );
@@ -122,6 +121,7 @@ contract Raffle is VRFConsumerBaseV2 {
         if (!success) {
             revert Raffle_TransferFailed();
         }
+       
     }
 
     function getEntranceFee() public view returns (uint256) {
