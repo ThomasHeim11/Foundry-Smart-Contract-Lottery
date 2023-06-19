@@ -12,7 +12,7 @@ import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2
 contract Raffle is VRFConsumerBaseV2 {
     error Raffle__NotEnoughEthSent();
     error Raffle_TransferFailed();
-    error Raffle_RaffleNotOpen();
+    error Raffle__RaffleNotOpen();
     error Raffle_UpkeepNotNeeded(
         uint256 currentBalance,
         uint256 numPlayers,
@@ -68,7 +68,7 @@ contract Raffle is VRFConsumerBaseV2 {
             revert Raffle__NotEnoughEthSent();
         }
         if (s_raffleState != RaffleState.OPEN) {
-            revert Raffle__NotEnoughEthSent();
+            revert Raffle__RaffleNotOpen();
         }
         s_players.push(payable(msg.sender));
         emit EnteredRaffle(msg.sender);
