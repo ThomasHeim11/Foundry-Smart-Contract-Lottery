@@ -28,6 +28,6 @@ contract DeployRaffle is Script {
             callbackGasLimit
         );
         vm.stopBroadcast();
-        return raffle;
+        return (raffle, helperConfig);
     }
 }
