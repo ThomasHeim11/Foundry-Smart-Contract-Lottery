@@ -37,9 +37,30 @@ contract HelperConfig is Script {
             });
     }
 
-    function getOrCreateEntConfig() public returns (NetworkConfig memory) {
+    function getOrCreateEntConfig() public pure returns (NetworkConfig memory) {
         if (activeNetworkConfig.vrfCoordinator != address(0)) {
             return activeNetworkConfig;
         }
+
+        uint96 baseFee = 0.25 ether;
+        uint96 gasPriceLink = 1e9;
+
+        vm.startBroadcast();
+        VRFCoordinatorV2Mock vrfCoordinator = new VRFCoordinatorV2Mock(
+            baseFee,
+            gasPriceLink
+        );
+        );
+        vm.stopBroadcast();
+
+        return NetworkConfig({
+            entranceFee: 0.1 ether,
+            interval: 30,
+            vrfCoordinator: address(vrfCoordinator),
+            gasLane: 0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c,
+            subscriptionId: 0,
+            callbackGasLimit: 500000
+        });
+
     }
 }
