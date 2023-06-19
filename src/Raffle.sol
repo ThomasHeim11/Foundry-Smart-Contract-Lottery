@@ -104,7 +104,7 @@ contract Raffle is VRFConsumerBaseV2 {
         );
     }
 
-    function fufillRandomWords(
+    function fulfillRandomWords(
         uint256 /* requestId*/,
         uint256[] memory randomWords
     ) internal override {
@@ -121,7 +121,6 @@ contract Raffle is VRFConsumerBaseV2 {
         if (!success) {
             revert Raffle_TransferFailed();
         }
-       
     }
 
     function getEntranceFee() public view returns (uint256) {

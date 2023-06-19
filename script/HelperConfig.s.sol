@@ -37,7 +37,7 @@ contract HelperConfig is Script {
             });
     }
 
-    function getOrCreateEntConfig() public pure returns (NetworkConfig memory) {
+    function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
         if (activeNetworkConfig.vrfCoordinator != address(0)) {
             return activeNetworkConfig;
         }
