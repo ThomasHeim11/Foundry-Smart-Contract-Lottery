@@ -38,7 +38,7 @@ contract CreateSubscription is Script {
 contract FundSubscription is Script {
     uint96 public constant FUN_AMOUNT = 3 ether;
 
-    function FundSubscriptionUsingConfig() public {
+    function fundSubscriptionUsingConfig() public {
         HelperConfig helperConfig = new HelperConfig();
         (
             ,
@@ -49,7 +49,7 @@ contract FundSubscription is Script {
             ,
             address link
         ) = helperConfig.activeNetworkConfig();
-        fundSubscription(vrfCoordinator, subId, link);
+        fundSubscription(vrfCoordinator, subscriptionId, link);
     }
 
     function fundSubscription(
@@ -59,7 +59,7 @@ contract FundSubscription is Script {
     ) public {
         console.log("Funding subscription", subId);
         console.log("Using vrfCoordinator", vrfCordinator);
-        console.log("On CahinID:", block.chainid);
+        console.log("On ChainID:", block.chainid);
         if (block.chainid == 11155111) {
             vm.startBroadcast();
             VRFCoordinatorV2Mock(vrfCordinator).fundSubscription(
@@ -89,10 +89,10 @@ contract AddConsumer is Script {
     function addConsumer (address raffle, address VRFCoordinator, uint64 subId) public {
         console.log("Adding consumer to contract", raffle);
         console.log("Using vrfCoordinator", VRFCoordinator);
-        console.log("On CahinID:", block.chainid);
+        console.log("On ChainID:", block.chainid);
         vm.startBroadcast();
         VRFCoordinatorV2Mock(VRFCoordinator).addConsumer(subId,raffle);
-        VM.stopBroadcast();
+        vm.stopBroadcast();
 
     }
 
@@ -111,11 +111,6 @@ contract AddConsumer is Script {
         addConsumer(raffle, vrfCoordinator, subId);
     } 
 
-}
-
-
-
-        
     
     function run() external {
         address raffle = DevOpsTools.get_most_recent_deployment (
