@@ -91,7 +91,7 @@ contract AddConsumer is Script {
         console.log("Using vrfCoordinator", VRFCoordinator);
         console.log("On CahinID:", block.chainid);
         vm.startBroadcast();
-        VRFCoordinatorV2Mock(VRFCoordinator).addConsumer(raffle, subId);
+        VRFCoordinatorV2Mock(VRFCoordinator).addConsumer(subId,raffle);
         VM.stopBroadcast();
 
     }
