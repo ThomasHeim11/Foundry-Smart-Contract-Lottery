@@ -86,6 +86,16 @@ contract FundSubscription is Script {
 
 contract AddConsumer is Script {
 
+    function addConsumer (address raffle, address VRFCoordinator, uint64 subId) public {
+        console.log("Adding consumer to contract", raffle);
+        console.log("Using vrfCoordinator", VRFCoordinator);
+        console.log("On CahinID:", block.chainid);
+        vm.startBroadcast();
+        VRFCoordinatorV2Mock(VRFCoordinator).addConsumer(raffle, subId);
+        VM.stopBroadcast();
+
+    }
+
     function addConsumerUsingConfig(address raffle) public {
         HelperConfig helperConfig = new HelperConfig();
         (
