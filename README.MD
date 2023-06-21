@@ -1,6 +1,7 @@
 # Foundry Smart Contract Lottery
 
-⭐️ (3:04:09) | Lesson 9: Foundry Smart Contract Lottery
+*[⭐️ (3:04:09) | Lesson 9: Foundry Smart Contract Lottery](https://www.youtube.com/watch?v=sas02qSFZ74&t=11049s)*
+
 
 - [Foundry Smart Contract Lottery](#foundry-smart-contract-lottery)
 - [Getting Started](#getting-started)
