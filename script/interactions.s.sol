@@ -11,16 +11,17 @@ import {DevOpsTools} from "lib/foundry-devops/src/DevOpsTools.sol";
 contract CreateSubscription is Script {
     function createSubsciptionUsingConfig() internal returns (uint64) {
         HelperConfig helperConfig = new HelperConfig();
-        (, , address vrfCoordinator, , , , , ) = helperConfig
+        (, , address vrfCoordinator, , , , , uint256 deployerKey ) = helperConfig
             .activeNetworkConfig();
-        return createSubscription(vrfCoordinator);
+        return createSubscription(vrfCoordinator, uint256 deployerKey);
     }
 
     function createSubscription(
         address vrfCoordinator
+        uint256 deployerKey
     ) public returns (uint64) {
         console.log("Creating subscription on ChainId", block.chainid);
-        vm.startBroadcast();
+        vm.startBroadcast(deployerKey);
         uint64 subId = VRFCoordinatorV2Mock(vrfCoordinator)
             .createSubscription();
 
@@ -49,27 +50,29 @@ contract FundSubscription is Script {
             ,
             address link
             ,
+            uint256 deployerKey
         ) = helperConfig.activeNetworkConfig();
-        fundSubscription(vrfCoordinator, subId, link);
+        fundSubscription(vrfCoordinator, subId, link, deployerKey);
     }
 
     function fundSubscription(
         address vrfCordinator,
         uint64 subId,
-        address link
+        address link,
+        uint256 deployerKey
     ) public {
         console.log("Funding subscription", subId);
         console.log("Using vrfCoordinator", vrfCordinator);
         console.log("On ChainID:", block.chainid);
         if (block.chainid == 31337) {
-            vm.startBroadcast();
+            vm.startBroadcast(deployerKey);
             VRFCoordinatorV2Mock(vrfCordinator).fundSubscription(
                 subId,
                 FUN_AMOUNT
             );
             vm.stopBroadcast();
         } else {
-            vm.startBroadcast();
+            vm.startBroadcast(deployerKey);
             LinkToken(link).transferAndCall(
                 vrfCordinator,
                 FUN_AMOUNT,

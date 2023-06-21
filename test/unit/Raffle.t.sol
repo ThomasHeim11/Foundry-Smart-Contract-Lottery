@@ -145,11 +145,19 @@ contract RaffleTest is Test {
     aasert(uint256(rState) ==1);
     }
 
+    modifier skipFork() {
+        if(block.chainid != 31337 ) {
+            return;
+        }
+        _;
+    }
+
     function testFufillRandomWordsCanOnlyBeCalledAfterPerformUpkeep(
         uint256 randomRequestId
     ) 
         public
         raffleEnteredAndTimePassed
+        skipFork
     {
         vm.expectRevert("nonexsistent request");
         VRFCoordinatorV2Mock(vrfCoordinator).fulfillRandomness(
