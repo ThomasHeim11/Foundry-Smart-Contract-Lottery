@@ -40,16 +40,16 @@ contract FundSubscription is Script {
 
     function fundSubscriptionUsingConfig() public {
         HelperConfig helperConfig = new HelperConfig();
-        (
+        (  
             ,
             ,
             address vrfCoordinator,
             ,
-            uint64 subscriptionId,
+            uint64 subId,
             ,
             address link
         ) = helperConfig.activeNetworkConfig();
-        fundSubscription(vrfCoordinator, subscriptionId, link);
+        fundSubscription(vrfCoordinator, subId, link);
     }
 
     function fundSubscription(

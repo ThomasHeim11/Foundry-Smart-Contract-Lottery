@@ -21,8 +21,6 @@ contract DeployRaffle is Script {
         ) = helperConfig.activeNetworkConfig();
 
         if (subscriptionId == 0) {
-            subscriptionId = 1;
-
             CreateSubscription createSubscription = new CreateSubscription();
             subscriptionId = createSubscription.createSubscription(
                 vrfCoordinator
