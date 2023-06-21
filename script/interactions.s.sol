@@ -40,7 +40,7 @@ contract FundSubscription is Script {
 
     function fundSubscriptionUsingConfig() public {
         HelperConfig helperConfig = new HelperConfig();
-        (  
+        (
             ,
             ,
             address vrfCoordinator,
@@ -60,15 +60,14 @@ contract FundSubscription is Script {
         console.log("Funding subscription", subId);
         console.log("Using vrfCoordinator", vrfCordinator);
         console.log("On ChainID:", block.chainid);
-        if (block.chainid == 11155111) {
+        if (block.chainid == 31337) {
             vm.startBroadcast();
             VRFCoordinatorV2Mock(vrfCordinator).fundSubscription(
                 subId,
                 FUN_AMOUNT
             );
             vm.stopBroadcast();
-        }
-        {
+        } else {
             vm.startBroadcast();
             LinkToken(link).transferAndCall(
                 vrfCordinator,
@@ -85,27 +84,28 @@ contract FundSubscription is Script {
 }
 
 contract AddConsumer is Script {
-
-    function addConsumer (address raffle, address VRFCoordinator, uint64 subId) public {
+    function addConsumer(
+        address raffle,
+        address VRFCoordinator,
+        uint64 subId
+    ) public {
         console.log("Adding consumer to contract", raffle);
         console.log("Using vrfCoordinator", VRFCoordinator);
         console.log("On ChainID:", block.chainid);
         vm.startBroadcast();
-        VRFCoordinatorV2Mock(VRFCoordinator).addConsumer(subId,raffle);
+        VRFCoordinatorV2Mock(VRFCoordinator).addConsumer(subId, raffle);
         vm.stopBroadcast();
-
     }
 
     function addConsumerUsingConfig(address raffle) public {
         HelperConfig helperConfig = new HelperConfig();
-        (, , address vrfCoordinator, , uint64 subId, , ) = helperConfig.
-        activeNetworkConfig();
+        (, , address vrfCoordinator, , uint64 subId, , ) = helperConfig
+            .activeNetworkConfig();
         addConsumer(raffle, vrfCoordinator, subId);
-    } 
+    }
 
-    
     function run() external {
-        address raffle = DevOpsTools.get_most_recent_deployment (
+        address raffle = DevOpsTools.get_most_recent_deployment(
             "Raffle",
             block.chainid
         );
