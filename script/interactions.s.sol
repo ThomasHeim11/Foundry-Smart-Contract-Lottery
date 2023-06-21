@@ -13,11 +13,11 @@ contract CreateSubscription is Script {
         HelperConfig helperConfig = new HelperConfig();
         (, , address vrfCoordinator, , , , , uint256 deployerKey ) = helperConfig
             .activeNetworkConfig();
-        return createSubscription(vrfCoordinator, uint256 deployerKey);
+        return createSubscription(vrfCoordinator, deployerKey);
     }
 
     function createSubscription(
-        address vrfCoordinator
+        address vrfCoordinator,
         uint256 deployerKey
     ) public returns (uint64) {
         console.log("Creating subscription on ChainId", block.chainid);
@@ -91,7 +91,7 @@ contract AddConsumer is Script {
     function addConsumer(
         address raffle,
         address VRFCoordinator,
-        uint64 subId
+        uint64 subId,
         uint256 deployerKey
     ) public {
         console.log("Adding consumer to contract", raffle);
