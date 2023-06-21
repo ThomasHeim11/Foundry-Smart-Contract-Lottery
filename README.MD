@@ -33,8 +33,7 @@ This is a section of the Cyfrin Foundry Solidity Course.
 ## Quickstart
 
 ```
-git clone https://github.com/ChainAccelOrg/foundry-smart-contract-lottery-f23
-cd foundry-smart-contract-lottery-f23
+git clone https://github.com/ThomasHeim11/Foundry-Smart-Contract-Lottery.git
 forge build
 ```
 
